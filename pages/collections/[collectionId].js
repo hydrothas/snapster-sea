@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { useWeb3 } from '@3rdweb/hooks'
-import { client } from '../../lib/sanityClient'
-import { ThirdwebSDK } from '@3rdweb/sdk'
-import Header from '../../components/Header'
-import { CgWebsite } from 'react-icons/cg'
-import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
-import { HiDotsVertical } from 'react-icons/hi'
-import NFTCard from '../../components/NFTCard'
+import React, { useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { useWeb3 } from "@3rdweb/hooks";
+import { client } from "../../lib/sanityClient";
+import { ThirdwebSDK } from "@3rdweb/sdk";
+import Header from "../../components/Header";
+import { CgWebsite } from "react-icons/cg";
+import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
+import { HiDotsVertical } from "react-icons/hi";
+import NFTCard from "../../components/NFTCard";
 
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
@@ -30,57 +30,57 @@ const style = {
   ethLogo: `h-6 mr-2`,
   statName: `text-lg w-full text-center mt-1`,
   description: `text-[#8a939b] text-xl w-max-1/4 flex-wrap mt-4`,
-}
+};
 
 const Collection = () => {
-  const router = useRouter()
-  const { provider } = useWeb3()
-  const { collectionId } = router.query
-  const [collection, setCollection] = useState({})
-  const [nfts, setNfts] = useState([])
-  const [listings, setListings] = useState([])
+  const router = useRouter();
+  const { provider } = useWeb3();
+  const { collectionId } = router.query;
+  const [collection, setCollection] = useState({});
+  const [nfts, setNfts] = useState([]);
+  const [listings, setListings] = useState([]);
 
   //
 
   const nftModule = useMemo(() => {
-    if (!provider) return
+    if (!provider) return;
 
     const sdk = new ThirdwebSDK(
       provider.getSigner(),
-      'https://rinkeby.infura.io/v3/a464b9152d8c466c8a94a514fce8e837'
-    )
-    return sdk.getNFTModule(collectionId)
-  }, [provider])
+      "https://rinkeby.infura.io/v3/a464b9152d8c466c8a94a514fce8e837"
+    );
+    return sdk.getNFTModule(collectionId);
+  }, [provider]);
 
   // get all NFTs in the collection
   useEffect(() => {
-    if (!nftModule) return
-    ;(async () => {
-      const nfts = await nftModule.getAll()
+    if (!nftModule) return;
+    (async () => {
+      const nfts = await nftModule.getAll();
 
-      setNfts(nfts)
-    })()
-  }, [nftModule])
+      setNfts(nfts);
+    })();
+  }, [nftModule]);
 
   const marketPlaceModule = useMemo(() => {
-    if (!provider) return
+    if (!provider) return;
 
     const sdk = new ThirdwebSDK(
       provider.getSigner(),
-      'https://rinkeby.infura.io/v3/a464b9152d8c466c8a94a514fce8e837'
-    )
+      "https://rinkeby.infura.io/v3/a464b9152d8c466c8a94a514fce8e837"
+    );
     return sdk.getMarketplaceModule(
-      '0xd8403C4CA2f724c248551151b829452E002f7103'
-    )
-  }, [provider])
+      "0xd8403C4CA2f724c248551151b829452E002f7103"
+    );
+  }, [provider]);
 
   // get all listings in the collection
   useEffect(() => {
-    if (!marketPlaceModule) return
-    ;(async () => {
-      setListings(await marketPlaceModule.getAllListings())
-    })()
-  }, [marketPlaceModule])
+    if (!marketPlaceModule) return;
+    (async () => {
+      setListings(await marketPlaceModule.getAllListings());
+    })();
+  }, [marketPlaceModule]);
 
   const fetchCollectionData = async (sanityClient = client) => {
     const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
@@ -93,25 +93,24 @@ const Collection = () => {
       title, floorPrice,
       "allOwners": owners[]->,
       description
-    }`
+    }`;
 
-    const collectionData = await sanityClient.fetch(query)
+    const collectionData = await sanityClient.fetch(query);
 
-    console.log(collectionData, '🔥')
+    console.log(collectionData, "🔥");
 
     // the query returns 1 object inside of an array
     if (collectionData[0]) {
-      await setCollection(collectionData[0])
+      await setCollection(collectionData[0]);
     }
-    
-  }
+  };
 
   useEffect(() => {
-    fetchCollectionData()
-  }, [collectionId])
+    fetchCollectionData();
+  }, [collectionId]);
 
-  console.log(router.query)
-  console.log(router.query.collectionId)
+  console.log(router.query);
+  console.log(router.query.collectionId);
   return (
     <div className="overflow-hidden">
       <Header />
@@ -121,7 +120,7 @@ const Collection = () => {
           src={
             collection?.bannerImageUrl
               ? collection.bannerImageUrl
-              : 'https://via.placeholder.com/200'
+              : "https://via.placeholder.com/200"
           }
           alt="banner"
         />
@@ -133,7 +132,7 @@ const Collection = () => {
             src={
               collection?.imageUrl
                 ? collection.imageUrl
-                : 'https://via.placeholder.com/200'
+                : "https://via.placeholder.com/200"
             }
             alt="profile image"
           />
@@ -166,7 +165,7 @@ const Collection = () => {
         </div>
         <div className={style.midRow}>
           <div className={style.createdBy}>
-            Created by{' '}
+            Created by{" "}
             <span className="text-[#2081e2]">{collection?.creator}</span>
           </div>
         </div>
@@ -178,7 +177,7 @@ const Collection = () => {
             </div>
             <div className={style.collectionStat}>
               <div className={style.statValue}>
-                {collection?.allOwners ? collection.allOwners.length : ''}
+                {collection?.allOwners ? collection.allOwners.length : ""}
               </div>
               <div className={style.statName}>owners</div>
             </div>
@@ -221,7 +220,7 @@ const Collection = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Collection
+export default Collection;

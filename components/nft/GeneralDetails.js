@@ -1,8 +1,8 @@
-import { AiFillHeart } from 'react-icons/ai'
-import { MdRefresh } from 'react-icons/md'
-import { RiShareBoxLine } from 'react-icons/ri'
-import { FiMoreVertical } from 'react-icons/fi'
-import { GiShare } from 'react-icons/gi'
+import { AiFillHeart } from "react-icons/ai";
+import { MdRefresh } from "react-icons/md";
+import { RiShareBoxLine } from "react-icons/ri";
+import { FiMoreVertical } from "react-icons/fi";
+import { GiShare } from "react-icons/gi";
 
 const style = {
   wrapper: `flex`,
@@ -17,7 +17,7 @@ const style = {
   actionButtons: `flex container justify-between text-[1.4rem] border-2 rounded-lg`,
   actionButton: `my-2`,
   divider: `border-r-2`,
-}
+};
 
 const GeneralDetails = ({ selectedNft }) => {
   return (
@@ -54,7 +54,7 @@ const GeneralDetails = ({ selectedNft }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default GeneralDetails
+export default GeneralDetails;
